@@ -1,13 +1,15 @@
-" TODO: Ver como hacer para usar git en este archivo
-
 " Para que funcione bien vimwiki
 set nocompatible              " be iMproved, required
 filetype off                  " required
 syntax on
+
 " Agregar antes de cuando use <leader>
 let mapleader = " "
+
+"Para ver bien la letra itálica.
 set t_ZH=[3m
 set t_ZR=[23m
+
 " Spell checking
 set spell spelllang=en,es
 
