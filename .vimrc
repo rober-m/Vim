@@ -21,7 +21,9 @@ Plugin 'VundleVim/Vundle.vim'
 
 "Markdown
 "https://github.com/vim-pandoc/vim-pandoc-syntax
-Plugin 'vim-pandoc/vim-pandoc-syntax'
+"Plugin 'vim-pandoc/vim-pandoc-syntax'
+Plugin 'godlygeek/tabular'
+Plugin 'plasticboy/vim-markdown'
 
 "FuzzyFider
 Plugin 'junegunn/fzf'
@@ -38,10 +40,9 @@ Plugin 'michal-h21/vim-zettel'
 "Tema
 Plugin 'morhetz/gruvbox'
 
-"Soncronizar automaticamente Github
+"Sincronizar automáticamente GitHub
 Plugin 'michal-h21/vimwiki-sync'
 
-" ????????/
 Plugin 'https://github.com/alok/notational-fzf-vim'
 
 " Marcar con color la primera ocurrencia de una letra al apretar "f" o "t"
@@ -51,6 +52,9 @@ Plugin 'unblevable/quick-scope'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 
+"Medir uso de VIM con ActivityWatcher
+Plugin 'ActivityWatch/aw-watcher-vim'
+
 call vundle#end()            " required
 filetype plugin indent on    " required
 
@@ -59,6 +63,8 @@ filetype plugin indent on    " required
 " Settings for VimWiki
 let g:vimwiki_list = [{'path':'~/scratchbox/vimwiki/zettelkasten/','ext':'.md','syntax':'markdown'}]
 let g:vimwiki_autowriteall = 1
+set conceallevel=2 
+"let g:vim_markdown_conceal = 1
 
 
 "-------------------------------
@@ -80,6 +86,20 @@ nnoremap <leader>o :ZettelOpen<CR>
 " Convertir palabra en tag
 nnoremap <leader>t bi:<ESC>t<Space>a:<ESC> 
 
+
+"-------------------------  Markdown (Pandoc)  ---------------------------------
+
+" TODO: ver cómo hacer para poder usar pandoc (descomentar para usar) pero sin
+" que se me sobreescriban los colores de las tags y backlinks.
+" Syntax de Pandoc: https://pandoc.org/MANUAL.html#pandocs-markdown
+"
+"Leer los documentos de Markdown con Pandoc
+"augroup pandoc_syntax
+"  autocmd! FileType vimwiki set syntax=markdown.pandoc
+"augroup END
+
+
+
 "-----------------------------  QUICK SCOPE  ----------------------------------------
 
 " Trigger a highlight in the appropriate direction when pressing these keys:
@@ -100,45 +120,18 @@ set relativenumber
 set nowrap
 set smartcase
 set termguicolors
+set incsearch
 "
 set colorcolumn=92
 highlight ColorColumn ctermbg=0 guibg=lightgrey
 "
 autocmd vimenter * colorscheme gruvbox
-" Personalization of colorscheme for markdown
-
-"local red          = {'#ee4a59', 196, 'red'}
-"local orange       = {'#ff8900', 208, 'darkyellow'}
-"local yellow       = {'#f0df33', 220, 'yellow'}
-"local green_dark   = {'#50de60', 83, 'darkgreen'}
-"local cyan         = {'#33efff', 87, 'cyan'}
-"local purple_light = {'#af60af', 63,  'magenta'}
-"
-"
-"markdownH1 = {fg=red, style='bold'},
-"markdownH2 = {fg=orange, style='bold'},
-"markdownH3 = {fg=yellow, style='bold'},
-"markdownH4 = {fg=green_dark, style='bold'},
-"markdownH5 = {fg=cyan, style='bold'},
-"markdownH6 = {fg=purple_light, style='bold'},
-
-
-"hi markdownH1 ctermfg=red term=bold guifg=#FF00FF
-
-
-
-"-------------------------  Markdown (Pandoc)  ---------------------------------
-
-" TODO: ver cómo hacer para poder usar pandoc (descomentar para usar) pero sin
-" que se me sobreescriban los colores de las tags y backlinks.
-" Syntax de Pandoc: https://pandoc.org/MANUAL.html#pandocs-markdown
-"
-"Leer los documentos de Markdown con Pandoc
-"augroup pandoc_syntax
-"  autocmd! FileType vimwiki set syntax=markdown.pandoc
-"augroup END
 
 "-----------------------------  Escribir  ----------------------------------------
+
+"Para poder pegar lo último que copié, aunque haya eliminado cosas después.
+nnoremap <leader>p "0p
+nnoremap <leader>P "0P
 
 nnoremap ; :
 nnoremap : ; 
