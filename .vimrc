@@ -13,6 +13,10 @@ set t_ZR=[23m
 " Spell checking
 set spell spelllang=en,es
 
+"Arreglar tecla Backspace no borra cuando salgo de insert mode y vuelvo a
+"entrar
+set backspace=indent,eol,start
+
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
@@ -59,16 +63,37 @@ call vundle#end()            " required
 filetype plugin indent on    " required
 
 
-"----------------------- VimWiki Zettelkasten ----------------------------------
+"----------------------- VimWiki  ----------------------------------
 " Settings for VimWiki
 let g:vimwiki_list = [{'path':'~/scratchbox/vimwiki/zettelkasten/','ext':'.md','syntax':'markdown'}]
 let g:vimwiki_autowriteall = 1
-set conceallevel=2 
-"let g:vim_markdown_conceal = 1
 
+"no se si hace falta especificar concellevel
+set conceallevel=2 
+
+" override default vimwiki link handling - could be extended to add
+" custom link types, etc.  Right now all it does is use vim itself
+" to handle files, crudely.
+function! VimwikiLinkHandler(link)
+   "if link starts with 'zotero:'
+   if a:link =~# 'zotero:'
+    try
+      "Open file in Zotero. Can't make it work with 'silent'
+      execute "!open -a Zotero " . shellescape(a:link)
+      return 1
+    catch
+      echo "Something went wrong..."
+      echo error 
+    endtry
+  endif
+  return 0
+endfunction
+
+
+"----------------------- vim-zettel Zettelkasten ----------------------------------
 
 "-------------------------------
-let g:zettel_fzf_command = "rg --column --line-number --smart-case --multiline \--no-heading --color=always "
+let g:zettel_fzf_command = "rg --column --line-number --smart-case --multiline --no-heading --color=always "
 " --smart-case: si escribo en minúscula, ignora el case. Si agrego mayúsculas,
 "  lo tiene en cuenta.
 let g:zettel_fzf_options = ['--exact', '--tiebreak=end']
@@ -77,7 +102,9 @@ let g:zettel_fzf_options = ['--exact', '--tiebreak=end']
 
 let g:zettel_format = "%y-%m-%d_%H%M_%title"
 let g:zettel_options = [{"template" :  "~/scratchbox/vimwiki/template1.tpl"}]
+
 let g:nv_search_paths = ['~/scratchbox/vimwiki/zettelkasten']
+let g:fzf_layout = { 'up': '~60%' }
 
 "insertar Backlinks
 nnoremap <leader>d :ZettelBackLinks<CR>
