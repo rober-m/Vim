@@ -68,12 +68,10 @@ filetype plugin indent on    " required
 let g:vimwiki_list = [{'path':'~/scratchbox/vimwiki/zettelkasten/','ext':'.md','syntax':'markdown'}]
 let g:vimwiki_autowriteall = 1
 
-"no se si hace falta especificar concellevel
+"no se si hace falta especificar conceal level
 set conceallevel=2 
 
-" override default vimwiki link handling - could be extended to add
-" custom link types, etc.  Right now all it does is use vim itself
-" to handle files, crudely.
+" Handle Zotero links
 function! VimwikiLinkHandler(link)
    "if link starts with 'zotero:'
    if a:link =~# 'zotero:'
@@ -89,32 +87,42 @@ function! VimwikiLinkHandler(link)
   return 0
 endfunction
 
+" Open link in split window
+nmap <Leader><CR> <Plug>VimwikiVSplitLink
 
-"----------------------- vim-zettel Zettelkasten ----------------------------------
+"----------------------------- vim-zettel Zettelkasten ------------------------------------
+"------------------------------------------------------------------------------------------
 
-"-------------------------------
-let g:zettel_fzf_command = "rg --column --line-number --smart-case --multiline --no-heading --color=always "
-" --smart-case: si escribo en minúscula, ignora el case. Si agrego mayúsculas,
-"  lo tiene en cuenta.
+" FZF ZETTEL
+let g:zettel_fzf_command = "rg --column --line-number --smart-case --multiline --no-heading --color=always"
+" --smart-case: si escribo en minúscula, ignora el case. Si agrego mayúsculas, lo tiene en cuenta.
 let g:zettel_fzf_options = ['--exact', '--tiebreak=end']
-"-------------------------------
+let g:nv_search_paths = ['~/scratchbox/vimwiki/zettelkasten']
+let g:fzf_layout = { 'up': '~60%' }
 
 
 let g:zettel_format = "%y-%m-%d_%H%M_%title"
 let g:zettel_options = [{"template" :  "~/scratchbox/vimwiki/template1.tpl"}]
 
-let g:nv_search_paths = ['~/scratchbox/vimwiki/zettelkasten']
-let g:fzf_layout = { 'up': '~60%' }
 
-"insertar Backlinks
+"Open a note by title
+nnoremap <leader>o :ZettelOpen<CR>title: 
+"Open a note by full text
+nnoremap <leader>of :ZettelOpen<CR>
+
+"Search and insert a note by the title
+inoremap [[ [[<ESC>:ZettelSearch<CR>title: 
+"Search and insert a note by full text
+inoremap [f [[<ESC>:ZettelSearch<CR>
+
+"Insert Backlinks
 nnoremap <leader>d :ZettelBackLinks<CR>
-"Abrir una nota
-nnoremap <leader>o :ZettelOpen<CR>
-" Convertir palabra en tag
+"Change word to tag 
 nnoremap <leader>t bi:<ESC>t<Space>a:<ESC> 
 
 
-"-------------------------  Markdown (Pandoc)  ---------------------------------
+"-------------------------------  Markdown (Pandoc)  --------------------------------------
+"------------------------------------------------------------------------------------------
 
 " TODO: ver cómo hacer para poder usar pandoc (descomentar para usar) pero sin
 " que se me sobreescriban los colores de las tags y backlinks.
@@ -127,7 +135,8 @@ nnoremap <leader>t bi:<ESC>t<Space>a:<ESC>
 
 
 
-"-----------------------------  QUICK SCOPE  ----------------------------------------
+"---------------------------------  QUICK SCOPE  ------------------------------------------
+"------------------------------------------------------------------------------------------
 
 " Trigger a highlight in the appropriate direction when pressing these keys:
 let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
@@ -142,9 +151,23 @@ augroup END
 
 let g:qs_max_chars=150
 
-"-----------------------------  Visual  ----------------------------------------
+"----------------------------------  Visual  ----------------------------------------------
+"------------------------------------------------------------------------------------------
+
+"Wrap text, but remap everything to move like nowrap.
+set wrap linebreak
+nnoremap j gj
+nnoremap k gk
+nnoremap 0 g0
+nnoremap ^ g^
+nnoremap $ g$
+vnoremap j gj
+vnoremap k gk
+vnoremap 0 g0
+vnoremap ^ g^
+vnoremap $ g$
+
 set relativenumber
-set nowrap
 set smartcase
 set termguicolors
 set incsearch
@@ -154,7 +177,19 @@ highlight ColorColumn ctermbg=0 guibg=lightgrey
 "
 autocmd vimenter * colorscheme gruvbox
 
-"-----------------------------  Escribir  ----------------------------------------
+"------------------------------  Window Management   --------------------------------------
+"------------------------------------------------------------------------------------------
+
+set splitright
+
+"Move between windows
+nnoremap <leader>h :wincmd h<CR>
+nnoremap <leader>j :wincmd j<CR>
+nnoremap <leader>k :wincmd k<CR>
+nnoremap <leader>l :wincmd l<CR>
+
+"----------------------------------  Escribir  --------------------------------------------
+"------------------------------------------------------------------------------------------
 
 "Para poder pegar lo último que copié, aunque haya eliminado cosas después.
 nnoremap <leader>p "0p
